@@ -61,7 +61,7 @@ There's also no WhatsApp/Instagram API integration, deliberately. Official APIs 
 ## Run it
 
 ```bash
-git clone REPO_LINK && cd utar
+git clone https://github.com/mayankinkk/utar.git && cd utar
 brew install ollama && brew services start ollama
 ollama pull gemma3:4b
 npm install && npm run dev   # http://localhost:3000
