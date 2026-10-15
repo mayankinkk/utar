@@ -1,0 +1,24 @@
+services:
+  utar:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      # UTAR_PASSWORD: change-me   # uncomment to require a login
+    volumes:
+      - utar-data:/app/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-models:/root/.ollama
+    restart: unless-stopped
+    # expose11434 only to the utar service (default compose network)
+
+volumes:
+  utar-data:
+  ollama-models:

@@ -1,0 +1,17 @@
+{
+  "name": "Uttar — reply drafts for small sellers",
+  "short_name": "Uttar",
+  "description": "Paste a customer message, get grounded reply drafts in your language and voice.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
