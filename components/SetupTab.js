@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useI18n } from "@/components/I18n";
 
 export default function SetupTab() {
+  const { t } = useI18n();
   const [data, setData] = useState(null);
   const [shop, setShop] = useState({ name: "", tone_notes: "" });
   const [product, setProduct] = useState({ name: "", price: "", variants: "", stock: "", tags: "" });
@@ -42,25 +44,25 @@ export default function SetupTab() {
   const h2 = "text-sm font-semibold tracking-tight";
   const count = "text-[11px] text-amber-600/70 dark:text-amber-500/70 font-medium ml-1.5 tabular-nums";
 
-  if (!data) return <p className="text-sm text-stone-400">loading…</p>;
+  if (!data) return <p className="text-sm text-stone-400">{t.loading}</p>;
 
   return (
     <div className="space-y-10">
       <section className="space-y-3">
         <h2 className={h2}>
-          shop<span className={count}>1</span>
+          {t.shop}<span className={count}>1</span>
         </h2>
         <div className="space-y-2">
           <input
             className={input}
-            placeholder="shop name"
+            placeholder={t.shopName}
             value={shop.name}
             onChange={(e) => setShop({ ...shop, name: e.target.value })}
           />
           <textarea
             className={input}
             rows={2}
-            placeholder="tone — e.g. friendly Hinglish, namaste greeting, light emojis"
+            placeholder={t.tone}
             value={shop.tone_notes}
             onChange={(e) => setShop({ ...shop, tone_notes: e.target.value })}
           />
@@ -75,14 +77,14 @@ export default function SetupTab() {
               load();
             }}
           >
-            save
+            {t.save}
           </button>
         </div>
       </section>
 
       <section className="space-y-3">
         <h2 className={h2}>
-          products<span className={count}>{data.products.length}</span>
+          {t.products}<span className={count}>{data.products.length}</span>
         </h2>
         <form
           onSubmit={async (e) => {
@@ -94,13 +96,13 @@ export default function SetupTab() {
           className="space-y-2"
         >
           <div className="grid grid-cols-2 gap-2">
-            <input className={input} placeholder="name" required value={product.name} onChange={(e) => setProduct({ ...product, name: e.target.value })} />
-            <input className={input} placeholder="price ₹" type="number" value={product.price} onChange={(e) => setProduct({ ...product, price: e.target.value })} />
-            <input className={input} placeholder="variants" value={product.variants} onChange={(e) => setProduct({ ...product, variants: e.target.value })} />
-            <input className={input} placeholder="stock" value={product.stock} onChange={(e) => setProduct({ ...product, stock: e.target.value })} />
+            <input className={input} placeholder={t.name} required value={product.name} onChange={(e) => setProduct({ ...product, name: e.target.value })} />
+            <input className={input} placeholder={t.price} type="number" value={product.price} onChange={(e) => setProduct({ ...product, price: e.target.value })} />
+            <input className={input} placeholder={t.variants} value={product.variants} onChange={(e) => setProduct({ ...product, variants: e.target.value })} />
+            <input className={input} placeholder={t.stock} value={product.stock} onChange={(e) => setProduct({ ...product, stock: e.target.value })} />
           </div>
-          <input className={input} placeholder="tags for search — muga, dupatta, gift" value={product.tags} onChange={(e) => setProduct({ ...product, tags: e.target.value })} />
-          <button className={btn} type="submit">add product</button>
+          <input className={input} placeholder={t.tags} value={product.tags} onChange={(e) => setProduct({ ...product, tags: e.target.value })} />
+          <button className={btn} type="submit">{t.addProduct}</button>
         </form>
         <div className="text-sm divide-y divide-stone-100 dark:divide-stone-900 border-t border-stone-200 dark:border-stone-800">
           {data.products.map((p) => (
@@ -113,7 +115,7 @@ export default function SetupTab() {
                 )}
               </p>
               <button onClick={() => post({ action: "delete", table: "product", id: p.id }).then(load)} className="text-[11px] text-stone-400 hover:text-red-600 shrink-0">
-                del
+                {t.del}
               </button>
             </div>
           ))}
@@ -122,7 +124,7 @@ export default function SetupTab() {
 
       <section className="space-y-3">
         <h2 className={h2}>
-          rules<span className={count}>{data.rules.length}</span>
+          {t.rules}<span className={count}>{data.rules.length}</span>
         </h2>
         <form
           onSubmit={async (e) => {
@@ -141,8 +143,8 @@ export default function SetupTab() {
             <option value="shipping_international">international</option>
             <option value="other">other</option>
           </select>
-          <textarea className={input} rows={2} placeholder="e.g. Guwahati same-day ₹40; rest of Assam 3–4 days ₹80" required value={rule.content} onChange={(e) => setRule({ ...rule, content: e.target.value })} />
-          <button className={btn} type="submit">add rule</button>
+          <textarea className={input} rows={2} placeholder={t.rulePlaceholder} required value={rule.content} onChange={(e) => setRule({ ...rule, content: e.target.value })} />
+          <button className={btn} type="submit">{t.addRule}</button>
         </form>
         <div className="text-sm divide-y divide-stone-100 dark:divide-stone-900 border-t border-stone-200 dark:border-stone-800">
           {data.rules.map((r) => (
@@ -152,7 +154,7 @@ export default function SetupTab() {
                 <span className="text-stone-700 dark:text-stone-300">{r.content}</span>
               </p>
               <button onClick={() => post({ action: "delete", table: "rule", id: r.id }).then(load)} className="text-[11px] text-stone-400 hover:text-red-600 shrink-0">
-                del
+                {t.del}
               </button>
             </div>
           ))}
@@ -161,10 +163,10 @@ export default function SetupTab() {
 
       <section className="space-y-3">
         <h2 className={h2}>
-          past replies<span className={count}>{data.pastReplies.length}</span>
+          {t.pastReplies}<span className={count}>{data.pastReplies.length}</span>
         </h2>
         <p className="text-[11px] text-stone-400">
-          drafts learn your voice from these. add 10–20 real ones.
+          {t.voiceHint}
         </p>
         <form
           onSubmit={async (e) => {
@@ -175,19 +177,19 @@ export default function SetupTab() {
           }}
           className="space-y-2"
         >
-          <textarea className={input} rows={2} placeholder="customer message" required value={reply.customerMsg} onChange={(e) => setReply({ ...reply, customerMsg: e.target.value })} />
-          <textarea className={input} rows={2} placeholder="your actual reply" required value={reply.sellerReply} onChange={(e) => setReply({ ...reply, sellerReply: e.target.value })} />
-          <button className={btn} type="submit">add example</button>
+          <textarea className={input} rows={2} placeholder={t.customerMsg} required value={reply.customerMsg} onChange={(e) => setReply({ ...reply, customerMsg: e.target.value })} />
+          <textarea className={input} rows={2} placeholder={t.yourReply} required value={reply.sellerReply} onChange={(e) => setReply({ ...reply, sellerReply: e.target.value })} />
+          <button className={btn} type="submit">{t.addExample}</button>
         </form>
         <div className="text-sm divide-y divide-stone-100 dark:divide-stone-900 border-t border-stone-200 dark:border-stone-800">
           {data.pastReplies.map((r) => (
             <div key={r.id} className="py-2 flex justify-between gap-3 items-baseline">
               <p className="min-w-0 truncate text-stone-600 dark:text-stone-400">
-                <span className="text-stone-400">c:</span> {r.customer_msg}{" "}
-                <span className="text-stone-400">s:</span> {r.seller_reply}
+                <span className="text-stone-400">{t.cLabel}</span> {r.customer_msg}{" "}
+                <span className="text-stone-400">{t.sLabel}</span> {r.seller_reply}
               </p>
               <button onClick={() => post({ action: "delete", table: "reply", id: r.id }).then(load)} className="text-[11px] text-stone-400 hover:text-red-600 shrink-0">
-                del
+                {t.del}
               </button>
             </div>
           ))}
@@ -195,7 +197,7 @@ export default function SetupTab() {
       </section>
 
       <section className="space-y-3">
-        <h2 className={h2}>bulk paste</h2>
+        <h2 className={h2}>{t.bulkPaste}</h2>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -209,8 +211,8 @@ export default function SetupTab() {
           className="space-y-2"
         >
           <select className={input} value={bulkMode} onChange={(e) => setBulkMode(e.target.value)}>
-            <option value="products">products — name, price, variants, stock, tags (one per line)</option>
-            <option value="replies">past replies — blank-line separated blocks</option>
+            <option value="products">{t.bulkProducts}</option>
+            <option value="replies">{t.bulkReplies}</option>
           </select>
           <textarea
             className={`${input} font-mono text-xs`}
@@ -219,7 +221,7 @@ export default function SetupTab() {
             value={bulkText}
             onChange={(e) => setBulkText(e.target.value)}
           />
-          <button className={btn} type="submit">insert</button>
+          <button className={btn} type="submit">{t.insert}</button>
         </form>
       </section>
     </div>

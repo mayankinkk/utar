@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useI18n } from "@/components/I18n";
 
 export default function HistoryTab() {
+  const { t } = useI18n();
   const [messages, setMessages] = useState(null);
   const [openId, setOpenId] = useState(null);
   const [copiedIdx, setCopiedIdx] = useState(null);
@@ -26,12 +28,12 @@ export default function HistoryTab() {
     }
   }
 
-  if (!messages) return <p className="text-sm text-stone-400">loading…</p>;
+  if (!messages) return <p className="text-sm text-stone-400">{t.loading}</p>;
 
   if (messages.length === 0) {
     return (
       <p className="text-sm text-stone-400">
-        no messages yet — drafts you generate will appear here.
+        {t.historyEmpty}
       </p>
     );
   }
@@ -39,7 +41,7 @@ export default function HistoryTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-baseline justify-between">
-        <p className="text-[11px] text-stone-400">last {messages.length} messages</p>
+        <p className="text-[11px] text-stone-400">{t.lastN(messages.length)}</p>
         <button
           onClick={async () => {
             await fetch("/api/history", { method: "DELETE" });
@@ -47,7 +49,7 @@ export default function HistoryTab() {
           }}
           className="text-[11px] text-stone-400 hover:text-red-600"
         >
-          clear all
+          {t.clearAll}
         </button>
       </div>
 
@@ -61,9 +63,9 @@ export default function HistoryTab() {
               <p className="text-sm min-w-0 truncate">{m.message}</p>
               <span className="text-[11px] shrink-0 text-stone-400">
                 {m.needsHuman ? (
-                  <span className="text-amber-600 dark:text-amber-400">flagged</span>
+                  <span className="text-amber-600 dark:text-amber-400">{t.flagged}</span>
                 ) : (
-                  "drafted"
+                  t.drafted
                 )}
                 {" · "}
                 {m.createdAt.slice(5, 16)}
@@ -74,9 +76,7 @@ export default function HistoryTab() {
               <div className="mt-2 space-y-2">
                 {m.needsHuman ? (
                   <p className="text-xs text-stone-500">
-                    {m.reason === "no_product_match"
-                      ? "no catalog match — answered by hand"
-                      : "flagged as outside catalog facts"}
+                    {m.reason === "no_product_match" ? t.noCatalogMatch : t.flaggedReason}
                   </p>
                 ) : (
                   <>
@@ -92,7 +92,7 @@ export default function HistoryTab() {
                           onClick={() => copy(text, `${m.id}-${i}`)}
                           className="mt-1 text-[11px] text-stone-500 hover:text-amber-700 dark:hover:text-amber-400"
                         >
-                          {copiedIdx === `${m.id}-${i}` ? "copied" : "copy"}
+                          {copiedIdx === `${m.id}-${i}` ? t.copied : t.copy}
                         </button>
                       </div>
                     ))}

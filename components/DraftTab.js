@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useI18n } from "@/components/I18n";
 
 const SAMPLES = [
   "bhaiya ye muga wala dupatta kitne ka hai? delivery Jorhat tak hoga?",
@@ -10,6 +11,7 @@ const SAMPLES = [
 ];
 
 export default function DraftTab() {
+  const { t } = useI18n();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -81,7 +83,7 @@ export default function DraftTab() {
           }}
           rows={3}
           maxLength={2000}
-          placeholder="paste a customer message…"
+          placeholder={t.placeholder}
           className="w-full text-sm leading-relaxed bg-transparent border border-stone-300 dark:border-stone-700 rounded-md px-3 py-2.5 placeholder:text-stone-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 resize-y"
         />
         <div className="flex items-center justify-between">
@@ -90,7 +92,7 @@ export default function DraftTab() {
             disabled={loading || !message.trim()}
             className="text-xs font-medium bg-amber-600 dark:bg-amber-500 text-white rounded-md px-4 py-1.5 hover:bg-amber-700 dark:hover:bg-amber-600 disabled:opacity-30 disabled:hover:bg-amber-600"
           >
-            {loading ? "drafting…" : "draft"}
+            {loading ? t.drafting : t.draftBtn}
           </button>
           {models.length > 1 && (
             <select
@@ -107,7 +109,7 @@ export default function DraftTab() {
           )}
         </div>
         <p className="text-[11px] text-stone-400">
-          try:{" "}
+          {t.tryLabel}{" "}
           {SAMPLES.map((s, i) => (
             <span key={i}>
               {i > 0 && " · "}
@@ -126,13 +128,9 @@ export default function DraftTab() {
 
       {result?.needsHuman && !loading && (
         <div className="border-l-2 border-amber-500 pl-4 py-1 space-y-1">
-          <p className="text-sm font-medium text-amber-800 dark:text-amber-300">Answer this yourself</p>
+          <p className="text-sm font-medium text-amber-800 dark:text-amber-300">{t.answerYourself}</p>
           <p className="text-sm text-stone-500 dark:text-stone-400">
-            {result.reason === "no_product_match"
-              ? "Nothing in your catalog matches this message."
-              : result.reason === "unknown_intent"
-                ? "Outside your catalog facts — customization, repairs, wholesale."
-                : "The model refused — it can't ground this in your catalog."}
+            {result.reason === "no_product_match" ? t.noMatch : result.reason === "unknown_intent" ? t.outsideFacts : t.modelRefused}
           </p>
         </div>
       )}
@@ -176,19 +174,19 @@ export default function DraftTab() {
                       : "text-stone-500 hover:text-amber-700 dark:hover:text-amber-400"
                   }`}
                 >
-                  {copiedIdx === i ? "copied" : "copy"}
+                  {copiedIdx === i ? t.copied : t.copy}
                 </button>
                 <button
                   onClick={() => setEditingIdx(editingIdx === i ? null : i)}
                   className="text-stone-500 hover:text-amber-700 dark:hover:text-amber-400"
                 >
-                  {editingIdx === i ? "done" : "edit"}
+                  {editingIdx === i ? t.done : t.edit}
                 </button>
               </div>
             </div>
           ))}
           <p className="text-[11px] text-stone-400 pt-3 border-t border-stone-200 dark:border-stone-800">
-            you send it yourself.
+            {t.youSend}
           </p>
         </div>
       )}
